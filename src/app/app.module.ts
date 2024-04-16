@@ -21,6 +21,7 @@ import { CustomerService } from './services/customerService';
 import { CustomerNewComponent } from './pages/customer/customer-new/customer-new.component';
 import { CustomerDelComponent } from './pages/customer/customer-del/customer-del.component';
 import { CustomerIndicatorsComponent } from './pages/customer/customer-indicators/customer-indicators.component';
+import { CustomIntercept } from './helpers/customIntercept';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { CustomerIndicatorsComponent } from './pages/customer/customer-indicator
   ],
   providers: [
     AuthGuard,
-    { provide: HTTP_INTERCEPTORS, useClass: AddTokenProtheus, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AddTokenProtheus, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: CustomIntercept, multi: true }
   ],
   bootstrap: [AppComponent]
 })

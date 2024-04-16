@@ -12,28 +12,31 @@ import { environment } from 'src/app/environment/environment';
 })
 export class CustomerEditComponent implements OnInit{
 
-  constructor(private activatedRoute: ActivatedRoute, 
+  constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
-              private customerService: CustomerService, 
+              private customerService: CustomerService,
               private poNotify: PoNotificationService) {}
 
-  codigo: any;            
+  codigo: any;
   loja: any;
   customerData: any;
   urlCidades: any;
 
   ngOnInit(): void {
-    
+
     this.activatedRoute.paramMap.subscribe(params => {
       this.codigo = params.get('codigo');
       this.loja = params.get('loja');
+
+      localStorage.setItem('codcliente', this.codigo);
+      localStorage.setItem('lojcliente', this.loja);
     })
 
     if(this.codigo){
       this.customerService.getDataCustomer(this.codigo,this.loja).subscribe(
         {
           next: (data: any) => {
-                     
+
             this.customerData = {
               codigo: this.codigo,
               loja: this.loja,
@@ -45,22 +48,22 @@ export class CustomerEditComponent implements OnInit{
               cidade: data.cidade,
               estado: data.estado,
               status: true,
-            }          
-  
+            }
+
           },
           error:() => {
               this.poNotify.error('Cliente nao encontrado no ERP');
           }
         }
       )
-    } 
-  }  
+    }
+  }
 
   @ViewChild('customerForm') customerForm !: PoDynamicFormComponent;
   @ViewChild('estado') estado !: PoComboComponent;
-  
+
   customerSave() {
-    
+
     this.poNotify.setDefaultDuration(2000)
 
     this.customerService.putDataCustomer(this.customerForm.value).subscribe({
@@ -73,7 +76,7 @@ export class CustomerEditComponent implements OnInit{
         this.poNotify.error(err.message)
       }
     });
-    
+
   }
 
   customerCancel() {
